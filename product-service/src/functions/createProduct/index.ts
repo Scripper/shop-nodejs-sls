@@ -8,6 +8,7 @@ export default {
       http: {
         method: 'post',
         path: '/products',
+        bodyType: 'CreateProductBody',
         request: {
           schemas: {
             'application/json': schema,
@@ -16,6 +17,7 @@ export default {
         responseData: {
           201: {
             description: 'OK',
+            bodyType: 'Product'
           },
         }
       },

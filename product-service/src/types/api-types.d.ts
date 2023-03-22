@@ -5,6 +5,13 @@ export type Product = {
     title: string;
 }
 
+export type CreateProductBody = {
+    description: string;
+    count: number;
+    price: number;
+    title: string;
+}
+
 export type Products = Product[];
 
 export type Stock = {

@@ -6,6 +6,5 @@ export default {
     price: { type: 'number' },
     count: { type: 'number' },
   },
-  additionalProperties: false,
   required: ['title', 'description', 'price', 'count'],
 } as const;
