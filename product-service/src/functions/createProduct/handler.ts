@@ -5,7 +5,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ProductPostBody } from '../../types/api-types';
 import schema from './schema';
+import {PublishCommand, SNSClient} from "@aws-sdk/client-sns";
 
+
+const sns = new SNSClient({ region: process.env.AWS_REGION });
 const dynamoDb = new DynamoDB.DocumentClient();
 
 const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
@@ -57,6 +60,14 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
             })
             .promise();
         console.log('Success transaction for putting Product and Stock');
+
+        await sns.send(
+            new PublishCommand({
+                Message: JSON.stringify({...productItem,  count: newProduct.count}),
+                TopicArn: process.env.CREATE_PRODUCT_TOPIC,
+            })
+        );
+
     } catch (e) {
         console.log('Error to put items', e.message);
         return formatErrorResponse(500, 'Internal Server Error.');
