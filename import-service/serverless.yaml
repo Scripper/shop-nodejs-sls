@@ -6,6 +6,7 @@ custom:
   s3BucketName: import-service-game-devices
   uploadFolder: uploaded
   parsedFilesFolder: parsed
+  productServiceName: product-service-${self:provider.stage}
 
 provider:
   name: aws
@@ -38,6 +39,9 @@ provider:
         - Effect: 'Allow'
           Action: 's3:*'
           Resource: 'arn:aws:s3:::${self:custom.s3BucketName}/*'
+        - Effect: 'Allow'
+          Action: 'sqs:*'
+          Resource: ${cf:${self:custom.productServiceName}.CatalogItemsQueueARN}
 
 functions:
   importProductsFile:
@@ -58,3 +62,4 @@ functions:
             - suffix: .csv
     environment:
       PARSED_FILES_FOLDER_NAME: ${self:custom.parsedFilesFolder}
+      CATALOG_ITEMS_QUEUE: ${cf:${self:custom.productServiceName}.CatalogItemsQueueURL}
