@@ -1,0 +1,24 @@
+service: authorization-service
+
+frameworkVersion: '3'
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-typescript
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-west-1
+  stage: dev
+  profile: default
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
+
+resources:
+  Outputs:
+    BasicAuthorizerARN:
+      Description: 'basicAuthorizer function'
+      Value: !GetAtt BasicAuthorizerLambdaFunction.Arn
